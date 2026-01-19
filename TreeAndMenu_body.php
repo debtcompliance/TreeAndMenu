@@ -1,6 +1,7 @@
 <?php
 
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Title\Title;
 
 class TreeAndMenu {
 
@@ -55,6 +56,7 @@ class TreeAndMenu {
 		global $wgJsMimeType, $wgTreeAndMenuPersistIfId;
 
 		// First arg is parser, last is the structure
+		/** @var Parser $parser */
 		$parser = array_shift( $args );
 		$bullets = array_pop( $args );
 
@@ -102,9 +104,8 @@ class TreeAndMenu {
 
 		// Parse the bullets to HTML
 		$opt = $parser->getOptions();
-		$html = $parser->parse( $bullets, $parser->getTitle(), $opt, true, false )->getText(
-			[ 'unwrap' => true ]
-		);
+		$parserOutput = $parser->parse( $bullets, $parser->getPage(), $opt, true, false );
+		$html = $parserOutput->runOutputPipeline( $opt, [ 'unwrap' => true ] )->getContentHolderText();
 
 		// Determine the class and id attributes
 		$class = $type == TREEANDMENU_TREE ? 'fancytree' : 'suckerfish';
@@ -179,16 +180,12 @@ class TreeAndMenu {
 	 * @throws MWException
 	 */
 	protected static function getTreeHtmlFromPage( $title, $out ) {
-		$content = WikiPage::newFromID( $title->getArticleID() )->getContent();
+		$content = MediaWikiServices::getInstance()->getWikiPageFactory()
+			->newFromID( $title->getArticleID() )
+			->getContent();
 		if ( is_object( $content ) ) {
 			$content = $content->getWikitextForTransclusion();
 		}
-		// For 1.32+
-		if ( method_exists( $out, 'parseAsContent' ) ) {
-			$html = $out->parseAsContent( $content );
-		} else {
-			$html = $out->parse( $content );
-		}
-		return $html;
+		return $out->parseAsContent( $content );
 	}
 }
