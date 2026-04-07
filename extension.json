@@ -40,7 +40,8 @@
 		"TreeAndMenu": ["i18n"]
 	},
 	"Hooks": {
-		"SkinBuildSidebar": "TreeAndMenu::onSkinBuildSidebar"
+		"SkinBuildSidebar": "TreeAndMenu::onSkinBuildSidebar",
+		"SkinAfterPortlet": "TreeAndMenu::onSkinAfterPortlet"
 	},
 	"ResourceModules": {
 		"ext.treeandmenu": {
