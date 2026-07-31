@@ -7,7 +7,7 @@
 	],
 	"url": "https://www.mediawiki.org/wiki/Extension:TreeAndMenu",
 	"descriptionmsg": "treeandmenu-desc",
-	"license-name": "[https://www.gnu.org/licenses/gpl-2.0.html GNU General Public Licence 2.0] or later",
+	"license-name": "GPL-2.0-or-later",
 	"requires": {
 		"MediaWiki": ">= 1.43"
 	},
